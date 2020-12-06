@@ -1,8 +1,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const logger = require("morgan");
+const path = require('path');
+const db = require("./models");
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/fitnessApp", { useNewUrlParser: true });
+const PORT = process.env.PORT || 3000;
+
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/fitnessApp", {
+  useNewUrlParser: true,
+});
 
 const app = express();
 
@@ -11,14 +17,21 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
-const db = mongoose.connection;
+const dbconnection = mongoose.connection;
 
-db.on("error", error => {
+dbconnection.on("error", (error) => {
   console.log("Database Error:", error);
 });
 
-const Workout = require("./models/model");
+//HTML Routes
+app.get("/exercise", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "exercise.html"));
+});
 
-app.listen(3000, () => {
-  console.log("App running on port 3000!");
+app.get("/stats", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "stats.html"));
+});
+
+app.listen(PORT, () => {
+  console.log(`App running on port ${PORT}!`);
 });
