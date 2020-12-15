@@ -30,6 +30,14 @@ async function initExercise() {
 
 }
 
+// async function initExercise() {
+//   if (location.search.split("=")[1] === undefined) {
+//     const workout = await API.createWorkout();
+//     if (workout) {
+//       location.search = "?id=" + workout._id;
+//     }
+//   }};
+
 initExercise();
 
 function handleWorkoutTypeChange(event) {
