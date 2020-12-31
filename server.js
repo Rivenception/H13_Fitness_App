@@ -55,6 +55,32 @@ app.post('/api/workouts', (req, res) => {
   });
 });
 
+app.put('/api/workouts/:id', (req, res) => {
+  db.Workout.findByIdAndUpdate(
+    req.params.id,
+    // push to model array the req.body
+    { $push: {exercises: req.body}},
+    // syntax needed according to mongoose doc to return objectt after update is applied
+    { new: true }
+  )
+  .then(dbWorkout => {
+    res.json(dbWorkout);
+  })
+  .catch(err => {
+    res.status(400).json(err);
+  });
+});
+
+app.get('/api/workouts/range', (req,res) => { 
+  db.Workout.find({})
+  .then(dbWorkout => {
+    res.json(dbWorkout);
+  })
+  .catch(err => {
+    res.status(400).json(err);
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`App running on port ${PORT}!`);
 });
